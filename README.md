@@ -4,7 +4,7 @@ STARGen is a structure-conditioned generative framework for RNA inverse folding.
 
 # Repository Structure
 
-**code/**
+**./code**
 Contains the core implementation of STARGen.
 
     train_STARGen.py: Training script for STARGen.
@@ -15,7 +15,7 @@ Contains the core implementation of STARGen.
     run_train.sh
     run_inference.sh
 
-**dataset/**
+**./dataset**
 Contains preprocessed datasets used for training, validation, and testing. All datasets are ready for direct use without additional preprocessing.
 
 # Training
