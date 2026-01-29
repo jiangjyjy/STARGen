@@ -52,7 +52,7 @@ import torch
 if torch.cuda.is_available():
     print(f"CUDA available: {torch.cuda.device_count()} GPU(s)")
     for i in range(torch.cuda.device_count()):
-        print(f"   GPU {i}: {torch.cuda.get_device_name(i)}")
+        print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
 else:
     print("CUDA is NOT available. Check driver or environment.")
 EOF
@@ -75,7 +75,7 @@ DEEPSPEED_PATH="/xx/bin/deepspeed"
 
 # =====================[ 7. Run DeepSpeed ]=====================
 echo "Launching DeepSpeed training..."
-$DEEPSPEED_PATH --num_gpus 2 train_bidir2_grpo2_why.py \
+$DEEPSPEED_PATH --num_gpus 2 train_STARGen.py \
   --model_path /model \
   --train_data /train_data.jsonl \
   --output_dir /train_result \
