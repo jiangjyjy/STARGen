@@ -16,7 +16,8 @@ Contains the core implementation of STARGen.
     run_inference.sh
 
 **./dataset**
-Contains preprocessed datasets used for training, validation, and testing. All datasets are ready for direct use without additional preprocessing.
+Contains preprocessed datasets used for training, validation, and testing. 
+All datasets are ready for direct use without additional preprocessing.
 
 # Training
 
