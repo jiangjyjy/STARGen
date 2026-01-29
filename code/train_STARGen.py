@@ -639,7 +639,7 @@ def clean_old_checkpoints(checkpoint_dir, save_total_limit):
             print(f"Error deleting checkpoint {ckpt}: {str(e)}")
 
 
-def grpo_data_collator(features, tokenizer):
+def riga_data_collator(features, tokenizer):
 
     prompt_ids_list = [f["prompt_ids"] for f in features]
     target_texts = [f["target_text"] for f in features]
@@ -856,7 +856,7 @@ def main():
         train_dataset, num_replicas=world_size, rank=local_rank, shuffle=True
     )
     
-    my_collator = partial(grpo_data_collator, tokenizer=tokenizer)
+    my_collator = partial(riga_data_collator, tokenizer=tokenizer)
 
     train_dataloader = DataLoader(
         train_dataset,
@@ -878,7 +878,7 @@ def main():
             val_dataset,
             batch_size=args.micro_batch_size,
             sampler=val_sampler,
-            collate_fn= partial(grpo_data_collator, tokenizer=tokenizer), #default_data_collator,
+            collate_fn= partial(riga_data_collator, tokenizer=tokenizer), #default_data_collator,
             pin_memory=True,
             num_workers=16,
             persistent_workers=True,
