@@ -69,7 +69,7 @@ export NCCL_DEBUG=INFO
 echo "Launching DeepSpeed evaluation..."
 DEEPSPEED_PATH="/deepspeed_PATH"
 
-$DEEPSPEED_PATH --num_gpus 1 inference_STARGen_BCD.py \
+$DEEPSPEED_PATH --num_gpus 1 inference_STARGen.py \
   --model_path /model \
   --train_data /test_data.jsonl \
   --output_dir /eval_result \
