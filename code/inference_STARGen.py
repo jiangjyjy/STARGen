@@ -52,7 +52,6 @@ SYSTEM_PROMPT1 = """You are an expert RNA inverse folding model.
 def parse_args():
     parser = argparse.ArgumentParser(description='RNA Inverse Folding Evaluation')
     
-    # 基础训练参数
     parser.add_argument('--model_path', type=str, default="",
                       help='Path to pretrained model')
     parser.add_argument('--train_data', type=str, default="",
@@ -62,7 +61,6 @@ def parse_args():
     parser.add_argument('--seed', type=int, default=42,
                   help='Random seed for reproducibility')
     
-    # 训练配置
     parser.add_argument('--num_epochs', type=int, default=10,
                       help='Number of training epochs')
     parser.add_argument('--micro_batch_size', type=int, default=1,
@@ -83,7 +81,6 @@ def parse_args():
                   help='Whether to use tf32 training')
   
     
-    # 评估参数
     parser.add_argument('--do_eval', action='store_true',
                       help='Whether to perform evaluation during training')
     parser.add_argument('--in_domain_eval', action='store_true',
@@ -95,13 +92,13 @@ def parse_args():
     parser.add_argument('--max_eval_samples', type=int, default=3000,
                       help='Maximum number of evaluation samples to use')
     
-    # 保存参数
+
     parser.add_argument('--save_steps', type=int, default=1000,
                       help='Number of steps between checkpoint saves')
     parser.add_argument('--save_total_limit', type=int, default=5,
                       help='Maximum number of checkpoints to keep')
     
-    # 分布式训练
+
     parser.add_argument('--local_rank', type=int, default=-1,
                       help='Local rank for distributed training')
     
@@ -225,12 +222,26 @@ class RnaDataset(Dataset):
         prompt_len = sys_prompt_len + len(sequence_tokens)
         labels[:prompt_len] = -100
         labels[labels == self.tokenizer.pad_token_id] = -100
+
+        prompt_ids_unpadded = torch.cat([sys_prompt, sequence_tokens])
+        
+        if len(prompt_ids_unpadded) > self.max_length:
+            prompt_ids_unpadded = prompt_ids_unpadded[:self.max_length]
+            
+        if len(prompt_ids_unpadded) < self.max_length:
+            pad_len = self.max_length - len(prompt_ids_unpadded)
+            prompt_ids = torch.cat([
+                torch.full((pad_len,), self.tokenizer.pad_token_id, dtype=torch.long),
+                prompt_ids_unpadded
+            ])
+        else:
+            prompt_ids = prompt_ids_unpadded
         
         return {
             "input_ids": input_ids,
             "attention_mask": attention_mask,
             "labels": labels,
-            "prompt_ids": input_ids,
+            "prompt_ids": prompt_ids,
             "target_text": target,   
             "structure_text": structure 
         }
